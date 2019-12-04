@@ -50,6 +50,49 @@
         </div>
     </section>
 
+   <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script>
+            var total ="99";
+
+            paypal.Button.render({
+                env: 'sandbox', // sandbox | production
+
+                // PayPal Client IDs - replace with your own
+                // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+                client: {
+                    sandbox:    'Ac3ohxQVVQOPHr4262bqY39pmW-K9Ny2BFd6NS7oZR3s7UREfEciVjNDYra2v1XWZAemqfYdOio96bJd',
+                    production: ''
+                },
+
+
+                // Show the buyer a 'Pay Now' button in the checkout flow
+                commit: true,
+
+                // payment() is called when the button is clicked
+                payment: function(data, actions) {
+
+                    // Make a call to the REST api to create the payment
+                    return actions.payment.create({
+                        payment: {
+                            transactions: [
+                                {
+                                    amount: { total: total.toFixed(2), currency: 'MXN' }//"'"+total.toFixed(2)+"'"
+                                }
+                            ]
+                        }
+                    });
+                },
+
+                // onAuthorize() is called when the buyer approves the payment
+                onAuthorize: function(data, actions) {
+
+                    // Make a call to the REST api to execute the payment
+                    return actions.payment.execute().then(function() {
+                        window.location = '{{ route('premium', [$user->id]) }}';
+                    });
+                }
+            }, '#paypal-button');
+        </script>
 
 
 
