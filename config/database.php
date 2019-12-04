@@ -1,5 +1,8 @@
 <?php
 
+$DATABASE_URL=parse_url('postgres://lyngedkcygouvw:d55dfd6325c1107c93882fc4a132a276abf8f9944622d97f5153b8fbea9bc9d2@ec2-174-129-254-231.compute-1.amazonaws.com:5432/dde3vmj33tnkk9');
+
+
 return [
 
     /*
@@ -56,13 +59,14 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => $DATABASE_URL['host'],
+            'port' => $DATABASE_URL['port'],
+            'database' => ltrim($DATABASE_URL['path'], '/'),
+            'username' => $DATABASE_URL['user'],
+            'password' => $DATABASE_URL['pass'],
             'charset' => 'utf8',
             'prefix' => '',
+            'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
